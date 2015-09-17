@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Bullet : MonoBehaviour, ICollidable
+public class Bullet : MonoBehaviour//, ICollidable
 {
 	public Vector3 vel;
-
+	private static int maxBullets=500;
+	private static int curBullets=0;
 
 	// Use this for initialization
 	void Start ()
@@ -42,6 +43,11 @@ public class Bullet : MonoBehaviour, ICollidable
 
     public static void CreateNewBullet(Vector3 startPos, Vector3 vel)
     {
+		// handle bullet limit
+		if (curBullets>=maxBullets)
+			return;
+		++curBullets;
+		
 		// create the GameObject and Bullet
 		GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
 		Bullet bullet = obj.AddComponent<Bullet>();
@@ -50,10 +56,13 @@ public class Bullet : MonoBehaviour, ICollidable
 		bullet.transform.position = startPos;
 		bullet.transform.localScale = Vector3.one*0.1f;
 		bullet.vel = vel;
+		bullet.collider.isTrigger = true;
     }
 
     public void Hit(RaycastHit rayhit, Bullet bullet)
     {
 
     }
+
+	public void OnDestroy() { --curBullets; }
 }
