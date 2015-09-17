@@ -11,7 +11,6 @@ public class World : MonoBehaviour
         Player player = GameObject.CreatePrimitive(PrimitiveType.Sphere).AddComponent<Player>();
         player.Init();
 
-
 	}
 	
 	// Update is called once per frame
