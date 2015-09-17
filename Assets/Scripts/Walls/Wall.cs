@@ -41,6 +41,10 @@ public class Wall : MonoBehaviour, ICollidable
 			BulletVelocity(rayhit, bullet));
     }
 
+	protected virtual Vector3 BulletNormal(RaycastHit rayHit) {
+		return FixVector3(rayHit.normal);
+	}
+
 	protected virtual Vector3 BulletStartPos(RaycastHit rayHit, Bullet bullet, Vector3 dir=default(Vector3))
 	{
 		// adjust dir, as necessary
@@ -50,15 +54,17 @@ public class Wall : MonoBehaviour, ICollidable
 
 		// return the new position
 		float totalDist = bullet.vel.magnitude*Time.fixedDeltaTime;
-		return rayHit.point+(totalDist-rayHit.distance)*dir;
+		return FixVector3(rayHit.point+(totalDist-rayHit.distance)*dir);
 	}
 
 	protected virtual Vector3 BulletVelocity(RaycastHit rayHit, Bullet bullet)
 	{
 		// perform the reflection
-		Vector3 normal = rayHit.normal;
+		Vector3 normal = BulletNormal(rayHit);
 		normal = new Vector3(normal.x, normal.y, 0).normalized;
 		Vector3 newDir = Vector3.Reflect(bullet.vel, normal);
-		return newDir.normalized*bullet.vel.magnitude*1f;
+		return FixVector3(newDir.normalized*bullet.vel.magnitude*1f);
 	}
+
+	protected Vector3 FixVector3(Vector3 vec) { return new Vector3(vec.x, vec.y, 0); }
 }

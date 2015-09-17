@@ -53,10 +53,10 @@ public class Bullet : MonoBehaviour//, ICollidable
 		Bullet bullet = obj.AddComponent<Bullet>();
 
 		// initialize the Bullet
-		bullet.transform.position = startPos;
+		bullet.transform.position = new Vector3(startPos.x, startPos.y);
 		bullet.transform.localScale = Vector3.one*0.1f;
-		bullet.vel = vel;
-		bullet.collider.isTrigger = true;
+		bullet.vel = new Vector3(vel.x, vel.y);
+		//bullet.collider.isTrigger = true;
     }
 
     public void Hit(RaycastHit rayhit, Bullet bullet)

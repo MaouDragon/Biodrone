@@ -18,7 +18,7 @@ public class MultiWall : Wall {
 
 		// check if a vector is valid
 		Func<Vector3, bool> isValid = (vec)=> {
-			return Vector3.Angle(rayHit.normal, vec)<90;
+			return Vector3.Angle(BulletNormal(rayHit), vec)<90;
 		};
 
 		// find the first direction
@@ -52,7 +52,6 @@ public class MultiWall : Wall {
 		prev = directions[numBullets/2];
 		for (; i<numBullets; ++i) {
 			prev = Quaternion.AngleAxis(angle, Vector3.forward)*prev;
-			Debug.Log("i: "+i);
 			if (!isValid(prev))
 				throw new Exception("Invalid combination of bullets and angles");
 			directions[i] = prev;
@@ -60,6 +59,6 @@ public class MultiWall : Wall {
 		
 		// create the bullets
 		for (i=0; i<directions.Length; ++i)
-			Bullet.CreateNewBullet(BulletStartPos(rayHit, bullet, rayHit.normal), directions[i]);
+			Bullet.CreateNewBullet(BulletStartPos(rayHit, bullet, BulletNormal(rayHit)), directions[i]);
 	}
 }
