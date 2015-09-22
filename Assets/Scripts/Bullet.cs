@@ -56,7 +56,7 @@ public class Bullet : MonoBehaviour//, ICollidable
 		bullet.transform.position = new Vector3(startPos.x, startPos.y);
 		bullet.transform.localScale = Vector3.one*0.1f;
 		bullet.vel = new Vector3(vel.x, vel.y);
-		bullet.collider.isTrigger = true;
+		//bullet.collider.isTrigger = true;
     }
 
     public void Hit(RaycastHit rayhit, Bullet bullet)

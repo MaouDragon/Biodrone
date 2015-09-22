@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, ICollidable
     {
         this.transform.position = new Vector3(0, 0, 0);
         playerRigidBody = GetComponent<Rigidbody>();
-        speed = 0.12f;
+        speed = 0.07f;
     }
 	
 	// Update is called once per frame
@@ -53,8 +53,9 @@ public class Player : MonoBehaviour, ICollidable
             vel.Normalize();
             
             // Find the rigidBody padding of where to spawn a bullet away from character
-            Vector3 spawnPos = transform.position + vel*(int)(this.renderer.bounds.size.x*0.55f);
-            Bullet.CreateNewBullet(spawnPos, vel*2);
+
+            Vector3 spawnPos = transform.position + vel*(this.GetComponent<Renderer>().bounds.size.x*0.3f) + vel*(this.GetComponent<Renderer>().bounds.size.y*0.3f);
+            Bullet.CreateNewBullet(spawnPos, vel*4);
         }
     }
 
