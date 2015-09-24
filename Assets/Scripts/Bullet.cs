@@ -1,37 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Collections.Generic;
 
 public class Bullet : MonoBehaviour//, ICollidable
 {
 	public Vector3 vel;
-	private static int maxBullets=500;
-	private static int curBullets=0;
+	//private static int maxBullets=500;
+	//private static int curBullets=0;
+	private static Dictionary<Type, int> maxBullets=new Dictionary<Type,int>();
+	private static Dictionary<Type, int> curBullets=new Dictionary<Type,int>();
+
+	public void Start() {
+		maxBullets.Add(typeof(Bullet), 500);
+		maxBullets.Add(typeof(PlayerBullet), 1);
+		
+		curBullets.Add(typeof(Bullet), 0);
+		curBullets.Add(typeof(PlayerBullet), 0);
+	}
 
 	// Use this for initialization
-	void Start ()
-    {
-	
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () 
-    {
+	public void Move(Vector3 diff) {
 		// raycast
-		Vector3 diff = Time.fixedDeltaTime*vel;
-		RaycastHit result;
-		bool hit = Physics.Raycast(transform.position, diff, out result, diff.magnitude);
+		List<RaycastHit> hits = new List<RaycastHit>(Physics.RaycastAll(transform.position, diff, diff.magnitude));
 
-		// if the raycast hit something
-		if (hit)
-		{
+		// loop over raycast hits, in order from the closes to the nearest
+		hits.Sort((a, b) => (a.distance>=b.distance?1:-1));
+		for (int i=0; i<hits.Count; ++i) {
 			// find an ICollidable
-			Component[] comps = result.transform.gameObject.GetComponents<Component>();
-			for (int i=0; i<comps.Length; ++i)
-			{
-				if (comps[i] is ICollidable)
-				{
-					(comps[i] as ICollidable).Hit(result, this);
-					Destroy(gameObject);
+			Component[] comps = hits[i].transform.gameObject.GetComponents<Component>();
+			for (int j=0; j<comps.Length; ++j) {
+				if (comps[j] is ICollidable) {
+					(comps[j] as ICollidable).Hit(hits[i], this);
+					DestroyImmediate(gameObject);
 					return;
 				}
 			}
@@ -40,23 +41,30 @@ public class Bullet : MonoBehaviour//, ICollidable
 		// move the bullet
 		transform.position += diff;
 	}
+	
+	// Update is called once per frame
+	void FixedUpdate () {
+		Move(Time.fixedDeltaTime*vel);
+	}
 
-    public static void CreateNewBullet(Vector3 startPos, Vector3 vel)
-    {
+    public static Bullet CreateNewBullet(Vector3 startPos, Vector3 vel, Type type=null) {
 		// handle bullet limit
-		if (curBullets>=maxBullets)
-			return;
-		++curBullets;
+		if (curBullets[type]>=maxBullets[type])
+			return null;
+		curBullets[type] = curBullets[type]+1;
 		
 		// create the GameObject and Bullet
 		GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-		Bullet bullet = obj.AddComponent<Bullet>();
+		if (type==null)
+			type = typeof(Bullet);
+		Bullet bullet = obj.AddComponent(type) as Bullet;
 
 		// initialize the Bullet
 		bullet.transform.position = new Vector3(startPos.x, startPos.y);
 		bullet.transform.localScale = Vector3.one*0.1f;
 		bullet.vel = new Vector3(vel.x, vel.y);
-		//bullet.collider.isTrigger = true;
+		bullet.GetComponent<Collider>().isTrigger = true;
+		return bullet;
     }
 
     public void Hit(RaycastHit rayhit, Bullet bullet)

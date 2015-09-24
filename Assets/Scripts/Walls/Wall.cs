@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Wall : MonoBehaviour, ICollidable
 {
@@ -17,14 +18,6 @@ public class Wall : MonoBehaviour, ICollidable
 				return 1;
 			return -1;
 		});
-
-		// apply the points to a new PolygonCollider2D
-		/*Vector2[] points3 = new Vector2[points2.Count];
-		for (int i=0; i<points3.Length; ++i)
-			points3[i] = points2[i];
-		DestroyImmediate(collider);
-		PolygonCollider2D pCol = gameObject.AddComponent<PolygonCollider2D>();
-		pCol.points = points3;*/
 	}
 	
 	// Update is called once per frame
@@ -33,19 +26,24 @@ public class Wall : MonoBehaviour, ICollidable
 	
 	}
 
-    public virtual void Hit(RaycastHit rayhit, Bullet bullet)
-    {
+    public virtual void Hit(RaycastHit rayHit, Bullet bullet) {
+		//if (bullet.GetType()==typeof(Bullet))
+			//return;
 		// create a new bullet
-		Bullet.CreateNewBullet(
-			BulletStartPos(rayhit, bullet),
-			BulletVelocity(rayhit, bullet));
+		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet), BulletVelocity(rayHit, bullet));
     }
+
+	protected void CreateBullet(RaycastHit rayHit, Type type, Vector3 bulletRemainVel, Vector3 bulletVelocity) {
+		Bullet bullet = Bullet.CreateNewBullet(rayHit.point, bulletVelocity, type);
+		//if (bullet!=null)
+			//bullet.Move(bulletRemainVel);
+	}
 
 	protected virtual Vector3 BulletNormal(RaycastHit rayHit) {
 		return FixVector3(rayHit.normal);
 	}
 
-	protected virtual Vector3 BulletStartPos(RaycastHit rayHit, Bullet bullet, Vector3 dir=default(Vector3))
+	protected virtual Vector3 BulletRemainVel(RaycastHit rayHit, Bullet bullet, Vector3 dir=default(Vector3))
 	{
 		// adjust dir, as necessary
 		if (dir==default(Vector3))
@@ -54,7 +52,7 @@ public class Wall : MonoBehaviour, ICollidable
 
 		// return the new position
 		float totalDist = bullet.vel.magnitude*Time.fixedDeltaTime;
-		return FixVector3(rayHit.point+(totalDist-rayHit.distance)*dir);
+		return FixVector3((totalDist-rayHit.distance)*dir);
 	}
 
 	protected virtual Vector3 BulletVelocity(RaycastHit rayHit, Bullet bullet)

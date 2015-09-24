@@ -14,7 +14,8 @@ public class MultiWall : Wall {
 	}
 
 	public override void Hit(RaycastHit rayHit, Bullet bullet) {
-		// find the new directions
+		//if (bullet.GetType()==typeof(Bullet))
+			//return;
 
 		// check if a vector is valid
 		Func<Vector3, bool> isValid = (vec)=> {
@@ -58,7 +59,10 @@ public class MultiWall : Wall {
 		}
 		
 		// create the bullets
-		for (i=0; i<directions.Length; ++i)
-			Bullet.CreateNewBullet(BulletStartPos(rayHit, bullet, BulletNormal(rayHit)), directions[i]);
+		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet, directions[0]), directions[0]);
+		for (i=1; i<directions.Length; ++i) {
+			//rayHit.point += BulletNormal(rayHit);
+			CreateBullet(rayHit, typeof(Bullet), BulletRemainVel(rayHit, bullet, directions[i]), directions[i]);
+		}
 	}
 }
