@@ -72,5 +72,5 @@ public class Bullet : MonoBehaviour//, ICollidable
 
     }
 
-	public void OnDestroy() { --curBullets; }
+	public void OnDestroy() { curBullets[this.GetType()] = curBullets[this.GetType()]-1; }
 }
