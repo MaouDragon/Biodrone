@@ -3,8 +3,7 @@ using System.Collections;
 
 public class BreakableWall : Wall
 {
-    GameObject wall;
-    int hitCount = 0;
+	float health=3;
 	// Use this for initialization
 	void Start ()
     {
@@ -19,9 +18,11 @@ public class BreakableWall : Wall
 
     public override void Hit(RaycastHit rayHit, Bullet bullet)
     {
-        hitCount++;
-        Debug.Log(hitCount);
-        if (hitCount >= 20)
-            Destroy(wall);
+		health -= bullet.vel.magnitude/4;
+		if (health<0) {
+			Destroy(gameObject);
+		} else {
+			base.Hit(rayHit, bullet);
+		}
     }
 }

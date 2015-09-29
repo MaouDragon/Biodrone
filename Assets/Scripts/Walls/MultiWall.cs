@@ -8,14 +8,15 @@ public class MultiWall : Wall {
 	[Range(0.1f, 89.9f)]
 	public float angle=5;
 
-	public void Start() {
+	public override void Start() {
 		if (numBullets*angle>180)
 			throw new Exception("Invalid Multi-Wall - range of bullets exceeds 180 degrees. Reduce the number of bullets OR reduce the angle until numBullets*angle < 180");
+		base.Start();
 	}
 
 	public override void Hit(RaycastHit rayHit, Bullet bullet) {
-		//if (bullet.GetType()==typeof(Bullet))
-			//return;
+		if (TryBreak(rayHit, bullet))
+			return;
 
 		// check if a vector is valid
 		Func<Vector3, bool> isValid = (vec)=> {
@@ -59,13 +60,13 @@ public class MultiWall : Wall {
 		}
 		
 		// create the bullets
-		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet, directions[0]), directions[0], true);
-        if (!bullet.GetStopSplit())
+		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet, directions[0]), directions[0], false, bullet.numHits);
+        if (bullet.canSplit && bullet.GetType()==typeof(PlayerBullet))
         {
             for (i = 1; i < directions.Length; ++i)
             {
                 //rayHit.point += BulletNormal(rayHit);
-                CreateBullet(rayHit, typeof(Bullet), BulletRemainVel(rayHit, bullet, directions[i]), directions[i], true);
+                CreateBullet(rayHit, typeof(Bullet), BulletRemainVel(rayHit, bullet, directions[i]), directions[i], false, bullet.numHits);
             }
         }
 	}

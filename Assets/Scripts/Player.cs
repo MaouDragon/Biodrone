@@ -22,7 +22,6 @@ public class Player : MonoBehaviour, ICollidable
         playerRigidBody = GetComponent<Rigidbody>();
         canFire = true;
         fireRate = 0.33f;
-        speed = 0.07f;
     }
 	
 	// Update is called once per frame
@@ -85,7 +84,7 @@ public class Player : MonoBehaviour, ICollidable
     {
         dir.Normalize();
         Vector3 spawnPos = transform.position + dir * (this.GetComponent<Renderer>().bounds.size.x * 0.3f) + dir * (this.GetComponent<Renderer>().bounds.size.y * 0.3f);
-        Bullet.CreateNewBullet(spawnPos, dir * 4);
+        Bullet.CreateNewBullet(spawnPos, dir * 12, typeof(PlayerBullet));
         GetComponentInChildren<PlayerCamera>().Shake(dir);
         GetComponent<AudioSource>().Play();
     }
