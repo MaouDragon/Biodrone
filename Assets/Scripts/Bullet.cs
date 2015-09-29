@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour//, ICollidable
 	private static Dictionary<Type, int> curBullets=new Dictionary<Type,int>();
 
 	public void Start() {
+        // FIXME: ArgumentException: An element with the same key already exists in the dictionary
+        //           Function ran each time after a bullet is created, causing this error
 		maxBullets.Add(typeof(Bullet), 500);
 		maxBullets.Add(typeof(PlayerBullet), 1);
 		

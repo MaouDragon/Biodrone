@@ -3,7 +3,7 @@ using System.Collections;
 
 public class World : MonoBehaviour 
 {
-    GameObject player;
+    //GameObject player;
 
 	// Use this for initialization
 	void Start () 

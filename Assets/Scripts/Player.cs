@@ -61,28 +61,32 @@ public class Player : MonoBehaviour, ICollidable
                 // Get the vector from where the mouse was clicked
                 Vector3 mouseV = Input.mousePosition;
                 // Get the vector based on the screen position of the rigidBody to the mouse position clicked
-                Vector3 vel = mouseV - Camera.main.WorldToScreenPoint(transform.position);
-                vel.Normalize();
+                Vector3 aim = mouseV - Camera.main.WorldToScreenPoint(transform.position);
 
                 // Find the rigidBody padding of where to spawn a bullet away from character
-                Vector3 spawnPos = transform.position + vel * (this.GetComponent<Renderer>().bounds.size.x * 0.3f) + vel * (this.GetComponent<Renderer>().bounds.size.y * 0.3f);
                 canFire = false;
-                Bullet.CreateNewBullet(spawnPos, vel * 4);
+                FireBullet(aim);
                 StartCoroutine(RefreshFire());
             }
             else
             {
                 Vector3 aim = new Vector3(rightX, rightY, 0.0f);
-                aim.Normalize();
                 if (aim != Vector3.zero)
                 {
-                    Vector3 spawnPos = transform.position + aim * (this.GetComponent<Renderer>().bounds.size.x * 0.3f) + aim * (this.GetComponent<Renderer>().bounds.size.y * 0.3f);
                     canFire = false;
-                    Bullet.CreateNewBullet(spawnPos, aim * 4);
+                    FireBullet(aim);
                     StartCoroutine(RefreshFire());
                 }
             }
         }
+    }
+
+    private void FireBullet(Vector3 dir)
+    {
+        dir.Normalize();
+        Vector3 spawnPos = transform.position + dir * (this.GetComponent<Renderer>().bounds.size.x * 0.3f) + dir * (this.GetComponent<Renderer>().bounds.size.y * 0.3f);
+        Bullet.CreateNewBullet(spawnPos, dir * 4);
+        GetComponentInChildren<PlayerCamera>().Shake(dir);
     }
 
     public IEnumerator RefreshFire()
