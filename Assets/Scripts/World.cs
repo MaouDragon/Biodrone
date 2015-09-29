@@ -8,8 +8,11 @@ public class World : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
-        Player player = GameObject.CreatePrimitive(PrimitiveType.Sphere).AddComponent<Player>();
-        player.Init();
+        // Initialize the Bullet Start() function to prevent an KeyNotFoundException when firing a bullet
+        Bullet bullet = new Bullet();
+        bullet.Start();
+        //Player player = GameObject.CreatePrimitive(PrimitiveType.Sphere).AddComponent<Player>();
+        //player.Init();
 
 	}
 	

@@ -48,15 +48,17 @@ public class Bullet : MonoBehaviour//, ICollidable
 	}
 
     public static Bullet CreateNewBullet(Vector3 startPos, Vector3 vel, Type type=null) {
-		// handle bullet limit
-		if (curBullets[type]>=maxBullets[type])
+        // If no bullet type was specified, standard Bullet type is used
+        if (type == null)
+            type = typeof(Bullet);
+
+        // handle bullet limit
+        if (curBullets[type]>=maxBullets[type])
 			return null;
 		curBullets[type] = curBullets[type]+1;
 		
 		// create the GameObject and Bullet
 		GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-		if (type==null)
-			type = typeof(Bullet);
 		Bullet bullet = obj.AddComponent(type) as Bullet;
 
 		// initialize the Bullet
