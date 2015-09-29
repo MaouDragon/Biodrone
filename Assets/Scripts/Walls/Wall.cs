@@ -30,11 +30,13 @@ public class Wall : MonoBehaviour, ICollidable
 		//if (bullet.GetType()==typeof(Bullet))
 			//return;
 		// create a new bullet
-		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet), BulletVelocity(rayHit, bullet));
+		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet), BulletVelocity(rayHit, bullet), bullet.GetStopSplit());
     }
 
-	protected void CreateBullet(RaycastHit rayHit, Type type, Vector3 bulletRemainVel, Vector3 bulletVelocity) {
+	protected void CreateBullet(RaycastHit rayHit, Type type, Vector3 bulletRemainVel, Vector3 bulletVelocity, bool stopSplit) {
 		Bullet bullet = Bullet.CreateNewBullet(rayHit.point, bulletVelocity, type);
+        if (stopSplit)
+            bullet.SetStopSplit(true);
 		//if (bullet!=null)
 			//bullet.Move(bulletRemainVel);
 	}

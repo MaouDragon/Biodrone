@@ -14,8 +14,8 @@ public class Player : MonoBehaviour, ICollidable
         
     }
 
-	// Use this for initialization
-	
+    // Use this for initialization
+
     void Awake()
     {
         this.transform.position = new Vector3(0, 0, 0);
@@ -87,6 +87,7 @@ public class Player : MonoBehaviour, ICollidable
         Vector3 spawnPos = transform.position + dir * (this.GetComponent<Renderer>().bounds.size.x * 0.3f) + dir * (this.GetComponent<Renderer>().bounds.size.y * 0.3f);
         Bullet.CreateNewBullet(spawnPos, dir * 4);
         GetComponentInChildren<PlayerCamera>().Shake(dir);
+        GetComponent<AudioSource>().Play();
     }
 
     public IEnumerator RefreshFire()

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class Bullet : MonoBehaviour//, ICollidable
 {
 	public Vector3 vel;
+    private bool stopSplit = false;
 	//private static int maxBullets=500;
 	//private static int curBullets=0;
 	private static Dictionary<Type, int> maxBullets=new Dictionary<Type,int>();
@@ -20,6 +21,10 @@ public class Bullet : MonoBehaviour//, ICollidable
 		curBullets.Add(typeof(Bullet), 0);
 		curBullets.Add(typeof(PlayerBullet), 0);
 	}
+
+    // Getter and setter for determining whether a bullet can further multiply off a wall
+    public bool GetStopSplit() { return stopSplit; }
+    public void SetStopSplit(bool b) { stopSplit = b; }
 
 	// Use this for initialization
 	public void Move(Vector3 diff) {

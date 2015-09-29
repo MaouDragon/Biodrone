@@ -59,10 +59,14 @@ public class MultiWall : Wall {
 		}
 		
 		// create the bullets
-		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet, directions[0]), directions[0]);
-		for (i=1; i<directions.Length; ++i) {
-			//rayHit.point += BulletNormal(rayHit);
-			CreateBullet(rayHit, typeof(Bullet), BulletRemainVel(rayHit, bullet, directions[i]), directions[i]);
-		}
+		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet, directions[0]), directions[0], true);
+        if (!bullet.GetStopSplit())
+        {
+            for (i = 1; i < directions.Length; ++i)
+            {
+                //rayHit.point += BulletNormal(rayHit);
+                CreateBullet(rayHit, typeof(Bullet), BulletRemainVel(rayHit, bullet, directions[i]), directions[i], true);
+            }
+        }
 	}
 }
