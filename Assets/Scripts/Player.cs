@@ -8,6 +8,9 @@ public class Player : MonoBehaviour, ICollidable
     private bool canFire;
     public float fireRate;
     Rigidbody playerRigidBody;
+	public GameObject shield;
+	public float shieldCounter;
+	public float health=4;
 
     public void Init()
     {
@@ -22,6 +25,11 @@ public class Player : MonoBehaviour, ICollidable
         playerRigidBody = GetComponent<Rigidbody>();
         canFire = true;
         fireRate = 0.33f;
+
+		shield = (GameObject)Instantiate(shield);
+		//shield.transform.parent = transform;
+		shield.SetActive(false);
+		shield.AddComponent<PlayerWall>();
     }
 	
 	// Update is called once per frame
@@ -32,7 +40,9 @@ public class Player : MonoBehaviour, ICollidable
 
     void FixedUpdate()
     {
-        KeyPress();
+		transform.position = new Vector3(transform.position.x, transform.position.y);
+		KeyPress();
+		shield.transform.position = transform.position;
     }
 
     // Calculate the vectors based on the input given
@@ -49,7 +59,8 @@ public class Player : MonoBehaviour, ICollidable
         move.Set(translationX, translationY, 0);
         move.Normalize();
         // Translate the rigidBody to the input movement
-        playerRigidBody.MovePosition(transform.position + move * speed);
+        playerRigidBody.MovePosition(transform.position + move * speed / 2);
+		playerRigidBody.velocity = move * speed / Time.fixedDeltaTime / 2;
 
         // Check if the player can fire a bullet
         if (canFire)
@@ -78,6 +89,13 @@ public class Player : MonoBehaviour, ICollidable
                 }
             }
         }
+
+		// handle the shield
+		shieldCounter -= Time.fixedDeltaTime;
+		if (shieldCounter<0 && Input.GetButtonDown("Fire2"))
+			shieldCounter = 4;
+		shield.SetActive(shieldCounter>1);
+		shield.transform.LookAt(transform.position + new Vector3(rightX, rightY), Vector3.back);
     }
 
     private void FireBullet(Vector3 dir)
@@ -97,6 +115,8 @@ public class Player : MonoBehaviour, ICollidable
 
     public void Hit(RaycastHit rayhit, Bullet bullet)
     {
-
+		health -= bullet.vel.magnitude/12;
+		if (health<0)
+			Application.LoadLevel(0);
     }
 }

@@ -35,8 +35,7 @@ public class Wall:MonoBehaviour, ICollidable {
 	}
 
 	protected void CreateBullet(RaycastHit rayHit, Type type, Vector3 bulletRemainVel, Vector3 bulletVelocity, bool canSplit, int numHits) {
-		print("createBullet();");
-		Bullet bullet = Bullet.CreateNewBullet(rayHit.point, bulletVelocity*speedChange, type);
+		Bullet bullet = Bullet.CreateNewBullet(rayHit.point, bulletVelocity/**speedChange*/, type);
 		if (bullet!=null) {
 			bullet.canSplit = canSplit;
 			bullet.numHits = numHits+1;

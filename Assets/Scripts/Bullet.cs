@@ -7,12 +7,9 @@ public class Bullet : MonoBehaviour//, ICollidable
 {
 	public Vector3 vel;
     public bool canSplit = true;
-	private static bool started=false;
 	public int numHits;
-	//private static int maxBullets=500;
-	//private static int curBullets=0;
-	private static Dictionary<Type, int> maxBullets=new Dictionary<Type,int>();
-	private static Dictionary<Type, int> curBullets=new Dictionary<Type,int>();
+	private static int maxBullets=500;
+	private static int curBullets=0;
 
 	// Use this for initialization
 	public void Move(Vector3 diff) {
@@ -25,7 +22,7 @@ public class Bullet : MonoBehaviour//, ICollidable
 			// find an ICollidable
 			ICollidable collidable = FindICollidable(hits[i].transform.gameObject);
 			if (collidable!=null) {
-				DestroyImmediate(gameObject);
+				Destroy(gameObject);
 				collidable.Hit(hits[i], this);
 				return;
 			}
@@ -36,23 +33,17 @@ public class Bullet : MonoBehaviour//, ICollidable
 	}
 
 	void OnTriggerEnter(Collider other) {
-		/*ICollidable collidable = FindICollidable(other.gameObject);
-		if (collidable!=null) {
+		ICollidable collidable = FindICollidable(other.gameObject);
+		if (collidable!=null && collidable.GetType()==typeof(Player)) {
 			collidable.Hit(new RaycastHit(), this);
-			DestroyImmediate(gameObject);
+			Destroy(gameObject);
 			return;
-		}*/
+		}
 	}
 	
 	void FixedUpdate () {
 		Move(Time.fixedDeltaTime*vel);
-	}
-
-	void Update() {
-		Material m = GetComponent<Renderer>().material;
-		Color c = (vel.magnitude>6?Color.red:Color.black);
-		m.color = c;
-		print("color: "+c);
+		transform.LookAt(transform.position+Vector3.back, vel);
 	}
 
 	private ICollidable FindICollidable(GameObject g) {
@@ -68,22 +59,11 @@ public class Bullet : MonoBehaviour//, ICollidable
         if (type == null)
             type = typeof(Bullet);
 
-		// handle initial bullet limits
-		if (!started) {
-			started = true;
-
-			maxBullets.Add(typeof(Bullet), 500);
-			maxBullets.Add(typeof(PlayerBullet), 2);
-
-			curBullets.Add(typeof(Bullet), 0);
-			curBullets.Add(typeof(PlayerBullet), 0);
-		}
-
         // handle bullet limit
 		//print("bullet type: "+type);
-		if (curBullets[type]>=maxBullets[type])
+		if (curBullets>=maxBullets && type!=typeof(PlayerBullet))
 			return null;
-		curBullets[type] = curBullets[type]+1;
+		++curBullets;
 		
 		// create the GameObject and Bullet
 		GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
@@ -92,8 +72,10 @@ public class Bullet : MonoBehaviour//, ICollidable
 		// initialize the Bullet
 		bullet.transform.position = new Vector3(startPos.x, startPos.y);
 		bullet.transform.localScale = Vector3.one*0.15f;
-		bullet.vel = new Vector3(vel.x, vel.y);
+		bullet.vel = new Vector3(vel.x, vel.y)*12f/14f;
 		bullet.GetComponent<Collider>().isTrigger = true;
+		Material m = bullet.GetComponent<Renderer>().material;
+		m.color = Color.white;
 		return bullet;
     }
 
@@ -102,5 +84,5 @@ public class Bullet : MonoBehaviour//, ICollidable
 
     }
 
-	public void OnDestroy() { curBullets[this.GetType()] = curBullets[this.GetType()]-1; }
+	public void OnDestroy() { --curBullets; }
 }

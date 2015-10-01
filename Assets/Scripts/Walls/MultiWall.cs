@@ -61,12 +61,12 @@ public class MultiWall : Wall {
 		
 		// create the bullets
 		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet, directions[0]), directions[0], false, bullet.numHits);
-        if (bullet.canSplit && bullet.GetType()==typeof(PlayerBullet))
+        if (bullet.canSplit && (bullet.GetType()==typeof(PlayerBullet) || bullet.GetType()==typeof(EnemyBullet)))
         {
             for (i = 1; i < directions.Length; ++i)
             {
                 //rayHit.point += BulletNormal(rayHit);
-                CreateBullet(rayHit, typeof(Bullet), BulletRemainVel(rayHit, bullet, directions[i]), directions[i], false, bullet.numHits);
+                CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet, directions[i]), directions[i], false, bullet.numHits);
             }
         }
 	}

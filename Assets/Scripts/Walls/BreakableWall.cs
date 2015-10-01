@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BreakableWall : Wall
 {
-	float health=3;
+	/*float health=3;
 	// Use this for initialization
 	void Start ()
     {
@@ -24,5 +24,5 @@ public class BreakableWall : Wall
 		} else {
 			base.Hit(rayHit, bullet);
 		}
-    }
+    }*/
 }
