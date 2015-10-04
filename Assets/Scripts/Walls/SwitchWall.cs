@@ -17,12 +17,13 @@ public class SwitchWall : Wall {
 
 	public override void Hit (RaycastHit rayHit, Bullet bullet)
 	{
-		CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet), BulletVelocity(rayHit, bullet), bullet.canSplit, bullet.numHits);
 		if (bullet is PlayerBullet) 
 		{
 			meter -= bullet.vel.magnitude / 12;
 			if (meter <= 0)
 				Destroy (gameObject);
 		}
+		else
+			CreateBullet(rayHit, bullet.GetType(), BulletRemainVel(rayHit, bullet), BulletVelocity(rayHit, bullet), bullet.canSplit, bullet.numHits);
 	}
 }

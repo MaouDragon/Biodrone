@@ -8,4 +8,11 @@ public class Turret:Enemy {
 		
 		base.Update();
 	}
+
+	public override void Fire ()
+	{
+		if ((player.transform.position - transform.position).magnitude < (new Vector3(20.0f, 20.0f, 0.0f)).magnitude) {
+			base.Fire();
+		}
+	}
 }

@@ -73,6 +73,7 @@ public class Player : MonoBehaviour, ICollidable
 
     public void Hit(RaycastHit rayhit, Bullet bullet)
     {
+		GetComponentInChildren<PlayerCamera>().Shake(rayhit.point);
 		if (--health<=0)
 			Application.LoadLevel(0);
     }
