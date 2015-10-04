@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 21d607c38e5cf0f4f963d220e1b38b2d
-timeCreated: 1443914450
+timeCreated: 1443920701
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,8 @@ TextureImporter:
     21300002: Tileset_Floors_3_Gritty_1
     21300004: Tileset_Floors_3_Gritty_2
     21300006: Tileset_Floors_3_Gritty_3
+    21300008: Tileset_Floors_3_Gritty_4
+    21300010: Tileset_Floors_3_Gritty_5
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -77,10 +79,10 @@ TextureImporter:
     - name: Tileset_Floors_3_Gritty_2
       rect:
         serializedVersion: 2
-        x: 768
-        y: 0
-        width: 768
-        height: 768
+        x: 864
+        y: 96
+        width: 576
+        height: 576
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -88,9 +90,29 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1536
+        y: 1524
         width: 768
         height: 768
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Tileset_Floors_3_Gritty_4
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 864
+        width: 576
+        height: 576
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Tileset_Floors_3_Gritty_5
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 1632
+        width: 576
+        height: 576
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
