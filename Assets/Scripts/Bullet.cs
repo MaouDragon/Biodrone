@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour//, ICollidable
 	public int numHits;
 	private static int maxBullets=500;
 	private static int curBullets=0;
+	private static List<Bullet> bullets=new List<Bullet>();
 
 	// Use this for initialization
 	public void Move(Vector3 diff) {
@@ -76,6 +77,14 @@ public class Bullet : MonoBehaviour//, ICollidable
 		bullet.GetComponent<Collider>().isTrigger = true;
 		Material m = bullet.GetComponent<Renderer>().material;
 		m.color = Color.white;
+		
+		// initialize the TrailRenderer
+		TrailRenderer tr = obj.AddComponent<TrailRenderer>();
+		tr.time = 0.33f;
+		tr.startWidth = tr.endWidth = 0.1f;
+		tr.materials[0].color = Color.red;
+
+		bullets.Add(bullet);
 		return bullet;
     }
 
@@ -85,4 +94,10 @@ public class Bullet : MonoBehaviour//, ICollidable
     }
 
 	public void OnDestroy() { --curBullets; }
+
+	public void MoveCollidable(GameObject obj, Vector3 diff) {
+		/*for (int i=0; i<bullets.Count; ++i) {
+			bullets[i].transform.position -= diff;
+		}*/
+	}
 }
