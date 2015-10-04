@@ -10,7 +10,7 @@ public class Player : MonoBehaviour, ICollidable
     Rigidbody playerRigidBody;
 	public GameObject shield;
 	public float shieldCounter;
-	public float health=4;
+	public float health=10;
 
     public void Init()
     {
@@ -21,14 +21,14 @@ public class Player : MonoBehaviour, ICollidable
 
     void Awake()
     {
-        this.transform.position = new Vector3(0, 0, 0);
+        //this.transform.position = new Vector3(0, 0, 0);
         playerRigidBody = GetComponent<Rigidbody>();
         canFire = true;
         fireRate = 0.33f;
 
 		shield = (GameObject)Instantiate(shield);
 		//shield.transform.parent = transform;
-		shield.SetActive(false);
+		shield.SetActive(true);
 		shield.AddComponent<PlayerWall>();
     }
 	
@@ -62,55 +62,13 @@ public class Player : MonoBehaviour, ICollidable
         playerRigidBody.MovePosition(transform.position + move * speed / 2);
 		playerRigidBody.velocity = move * speed / Time.fixedDeltaTime / 2;
 
-        // Check if the player can fire a bullet
-        if (canFire)
-        {
-            // When the button to fire bullets is pushed
-            if (Input.GetButtonDown("Fire1"))
-            {
-                // Get the vector from where the mouse was clicked
-                Vector3 mouseV = Input.mousePosition;
-                // Get the vector based on the screen position of the rigidBody to the mouse position clicked
-                Vector3 aim = mouseV - Camera.main.WorldToScreenPoint(transform.position);
-
-                // Find the rigidBody padding of where to spawn a bullet away from character
-                canFire = false;
-                FireBullet(aim);
-                StartCoroutine(RefreshFire());
-            }
-            else
-            {
-                Vector3 aim = new Vector3(rightX, rightY, 0.0f);
-                if (aim != Vector3.zero)
-                {
-                    canFire = false;
-                    FireBullet(aim);
-                    StartCoroutine(RefreshFire());
-                }
-            }
-        }
+		// Get the vector from where the mouse was clicked
+		Vector3 mouseV = Input.mousePosition;
+		// Get the vector based on the screen position of the rigidBody to the mouse position clicked
+		Vector3 aim = mouseV - Camera.main.WorldToScreenPoint(transform.position);
 
 		// handle the shield
-		shieldCounter -= Time.fixedDeltaTime;
-		if (shieldCounter<0 && Input.GetButtonDown("Fire2"))
-			shieldCounter = 4;
-		shield.SetActive(shieldCounter>1);
-		shield.transform.LookAt(transform.position + new Vector3(rightX, rightY), Vector3.back);
-    }
-
-    private void FireBullet(Vector3 dir)
-    {
-        dir.Normalize();
-        Vector3 spawnPos = transform.position + dir * (this.GetComponent<Renderer>().bounds.size.x * 0.3f) + dir * (this.GetComponent<Renderer>().bounds.size.y * 0.3f);
-        Bullet.CreateNewBullet(spawnPos, dir * 12, typeof(PlayerBullet));
-        GetComponentInChildren<PlayerCamera>().Shake(dir);
-        GetComponent<AudioSource>().Play();
-    }
-
-    public IEnumerator RefreshFire()
-    {
-        yield return new WaitForSeconds(fireRate);
-        canFire = true;
+		shield.transform.LookAt(transform.position - new Vector3(aim.x, aim.y, 0.0f), Vector3.back);
     }
 
     public void Hit(RaycastHit rayhit, Bullet bullet)
