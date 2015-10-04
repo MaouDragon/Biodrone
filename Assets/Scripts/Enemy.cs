@@ -5,14 +5,14 @@ public class Enemy:MonoBehaviour, ICollidable {
 	public float firePeriod=1;
 	public float fireSpeed=12;
 	public float rangeOfFire=20;
-	public float health=0;
+	public int health=0;
 	private float timeToFire;
 	public GameObject player;
 
 	public virtual void Start() {
 		timeToFire = Random.Range(0, firePeriod);
 		if (health==0)
-			health = float.PositiveInfinity;
+			health = int.MaxValue;
 	}
 
 	public virtual void Update() {
@@ -31,8 +31,7 @@ public class Enemy:MonoBehaviour, ICollidable {
 	}
 
 	public void Hit(RaycastHit rayhit, Bullet bullet) {
-		health -= bullet.vel.magnitude/12;
-		if (health<0)
+		if (--health<=0)
 			Destroy(gameObject);
 	}
 }

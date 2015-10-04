@@ -5,12 +5,12 @@ using System;
 
 public class Wall:MonoBehaviour, ICollidable {
 	public float speedChange=0.95f;
-	public float health=0;
+	public int health=0;
 
 	// Use this for initialization
 	public virtual void Start() {
 		if (health==0)
-			health = float.PositiveInfinity;
+			health = int.MaxValue;
 	}
 
 	// Update is called once per frame
@@ -25,8 +25,7 @@ public class Wall:MonoBehaviour, ICollidable {
 	}
 
 	protected virtual bool TryBreak(RaycastHit rayHit, Bullet bullet) {
-		health -= bullet.vel.magnitude/12;
-		if (health<=0) {
+		if (--health<=0) {
 			CreateBullet(rayHit, bullet.GetType(), Vector3.zero, bullet.vel, bullet.canSplit, bullet.numHits);
 			Destroy(gameObject);
 			return true;

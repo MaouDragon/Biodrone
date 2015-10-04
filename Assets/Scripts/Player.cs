@@ -10,7 +10,7 @@ public class Player : MonoBehaviour, ICollidable
     Rigidbody playerRigidBody;
 	public GameObject shield;
 	public float shieldCounter;
-	public float health=10;
+	public int health=10;
 
     public void Init()
     {
@@ -73,8 +73,7 @@ public class Player : MonoBehaviour, ICollidable
 
     public void Hit(RaycastHit rayhit, Bullet bullet)
     {
-		health -= bullet.vel.magnitude/12;
-		if (health<0)
+		if (--health<=0)
 			Application.LoadLevel(0);
     }
 }
