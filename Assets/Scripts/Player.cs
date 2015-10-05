@@ -5,8 +5,6 @@ public class Player : MonoBehaviour, ICollidable
 {
     public float speed;
     private Vector3 move;
-    private bool canFire;
-    public float fireRate;
     Rigidbody playerRigidBody;
 	public GameObject shield;
 	public float shieldCounter;
@@ -23,8 +21,6 @@ public class Player : MonoBehaviour, ICollidable
     {
         //this.transform.position = new Vector3(0, 0, 0);
         playerRigidBody = GetComponent<Rigidbody>();
-        canFire = true;
-        fireRate = 0.33f;
 
 		shield = (GameObject)Instantiate(shield);
 		//shield.transform.parent = transform;

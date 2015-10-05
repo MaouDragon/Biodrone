@@ -24,7 +24,7 @@ public class SwitchWall : Wall {
             if (meter <= 0)
             {
                 switchOn = true;
-                GetComponent<SpriteRenderer>().sprite = spriteOn;
+                GetComponent<Animator>().SetBool("turnOn", true);
             }
 		}
 		else
