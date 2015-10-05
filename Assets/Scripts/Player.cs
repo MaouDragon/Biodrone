@@ -6,7 +6,8 @@ public class Player : MonoBehaviour, ICollidable
     public float speed;
     private Vector3 move;
     Rigidbody playerRigidBody;
-	public GameObject shield;
+	private GameObject shield;
+    public Sprite shieldSprite;
 	public float shieldCounter;
 	public int health=10;
 
@@ -19,18 +20,21 @@ public class Player : MonoBehaviour, ICollidable
 
     void Awake()
     {
-        //this.transform.position = new Vector3(0, 0, 0);
         playerRigidBody = GetComponent<Rigidbody>();
 
-		shield = (GameObject)Instantiate(shield);
-		//shield.transform.parent = transform;
-		shield.SetActive(true);
-		shield.AddComponent<PlayerWall>();
-		shield.transform.position = transform.position;
+        //shield = (GameObject)Instantiate(shield);
+        ////shield.transform.parent = transform;
+        //shield.SetActive(true);
+        //shield.AddComponent<PlayerWall>();
+        //shield.transform.position = transform.position;
+
+        shield = transform.Find("Shield").gameObject;
+        //shield.AddComponent<SpriteRenderer>().sprite = shieldSprite;
+        //shield.GetComponent<MeshRenderer>().enabled = false;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
         
 	}
@@ -39,7 +43,7 @@ public class Player : MonoBehaviour, ICollidable
     {
 		transform.position = new Vector3(transform.position.x, transform.position.y);
 		KeyPress();
-		shield.transform.position = transform.position;
+		//shield.transform.position = transform.position;
     }
 
     // Calculate the vectors based on the input given
@@ -66,7 +70,7 @@ public class Player : MonoBehaviour, ICollidable
         // Get the vector from where the mouse was clicked
         Vector3 mouseV = Input.mousePosition;
 		// Get the vector based on the screen position of the rigidBody to the mouse position clicked
-		Vector3 aim = mouseV - Camera.main.WorldToScreenPoint(transform.position);
+		//Vector3 aim = mouseV - Camera.main.WorldToScreenPoint(transform.position);
 
         // handle the shield
         //shield.transform.LookAt(transform.position - new Vector3(aim.x, aim.y, 0.0f), Vector3.back);
@@ -76,8 +80,15 @@ public class Player : MonoBehaviour, ICollidable
 
     public void Hit(RaycastHit rayhit, Bullet bullet)
     {
-		GetComponentInChildren<PlayerCamera>().Shake(bullet.vel.magnitude);
-		if (--health<=0)
-			Application.LoadLevel(0);
+        if (rayhit.collider.gameObject.Equals(shield))
+        {
+            shield.GetComponent<PlayerWall>().Hit(rayhit, bullet);
+        }
+        else
+        {
+            GetComponentInChildren<PlayerCamera>().Shake(bullet.vel.magnitude);
+            if (--health <= 0)
+                Application.LoadLevel(0);
+        }
     }
 }

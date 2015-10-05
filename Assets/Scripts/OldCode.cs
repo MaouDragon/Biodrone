@@ -6,7 +6,7 @@ public class OldCode : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		/**
+        /**
 		// Check if the player can fire a bullet
 		if (canFire)
 		{
@@ -53,11 +53,18 @@ public class OldCode : MonoBehaviour {
         yield return new WaitForSeconds(fireRate);
         canFire = true;
     }
+
+        //shield = (GameObject)Instantiate(shield);
+        ////shield.transform.parent = transform;
+        //shield.SetActive(true);
+        //shield.AddComponent<PlayerWall>();
+        //shield.transform.position = transform.position;
+
 		*/
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 }
