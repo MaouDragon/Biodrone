@@ -9,11 +9,17 @@ public class World : MonoBehaviour
 	public GameObject[] firstSwitches;
 	public GameObject[] secondSwitches;
 	public GameObject firstWall;
+	public GameObject playerBullet;
+	public GameObject normalBullet;
+	public Material bulletTrail;
 
 	// Use this for initialization
 	void Start () 
     {
         player = transform.parent.gameObject;
+		Bullet.playerBullet = playerBullet;
+		Bullet.normalBullet = normalBullet;
+		Bullet.bulletTrail = bulletTrail;
 	}
 	
 	// Update is called once per frame

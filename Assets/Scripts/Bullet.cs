@@ -11,6 +11,9 @@ public class Bullet : MonoBehaviour//, ICollidable
 	private static int maxBullets=500;
 	private static int curBullets=0;
 	private static List<Bullet> bullets=new List<Bullet>();
+	public static GameObject playerBullet;
+	public static GameObject normalBullet;
+	public static Material bulletTrail;
 
 	// Use this for initialization
 	public void Move(Vector3 diff) {
@@ -67,22 +70,23 @@ public class Bullet : MonoBehaviour//, ICollidable
 		++curBullets;
 		
 		// create the GameObject and Bullet
-		GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+		//GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+		GameObject obj = (GameObject)Instantiate(type==typeof(PlayerBullet)?playerBullet:normalBullet);
 		Bullet bullet = obj.AddComponent(type) as Bullet;
 
 		// initialize the Bullet
 		bullet.transform.position = new Vector3(startPos.x, startPos.y);
-		bullet.transform.localScale = Vector3.one*0.15f;
+		bullet.transform.localScale = Vector3.one*0.3f;
 		bullet.vel = new Vector3(vel.x, vel.y)*12f/14f;
 		bullet.GetComponent<Collider>().isTrigger = true;
-		Material m = bullet.GetComponent<Renderer>().material;
-		m.color = Color.white;
 		
 		// initialize the TrailRenderer
 		TrailRenderer tr = obj.AddComponent<TrailRenderer>();
-		tr.time = 0.33f;
+		tr.time = 0.05f;
 		tr.startWidth = tr.endWidth = 0.1f;
-		tr.materials[0].color = Color.red;
+		tr.material = (Material)Instantiate(bulletTrail);
+		tr.material.color = (type==typeof(PlayerBullet)?new Color(10/255f, 157/255f, 0):new Color(157/255f, 0, 0));
+		//tr.sharedMaterial = bulletTrail;
 
 		bullets.Add(bullet);
 		return bullet;
@@ -95,9 +99,18 @@ public class Bullet : MonoBehaviour//, ICollidable
 
 	public void OnDestroy() { --curBullets; }
 
-	public void MoveCollidable(GameObject obj, Vector3 diff) {
-		/*for (int i=0; i<bullets.Count; ++i) {
-			bullets[i].transform.position -= diff;
-		}*/
+	public static void MoveCollidables(GameObject[] objs, Vector3 diff) {
+		throw new NotImplementedException("MoveCollidables isn't implemented yet");
+		List<Bullet> tmpBullets = new List<Bullet>(bullets);
+		for (int i=0; i<tmpBullets.Count; ++i)
+			try { tmpBullets[i].transform.position += diff; } catch (Exception e) { if (typeof(MissingReferenceException)!=e.GetType()) throw e; }
+		for (int i=0; i<objs.Length; ++i)
+			objs[i].transform.position += diff;
+		for (int i=0; i<tmpBullets.Count; ++i)
+			try { tmpBullets[i].Move(-diff); } catch (Exception e) { if (typeof(MissingReferenceException)!=e.GetType()) throw e; }
+	}
+
+	public static void RotateCollidables(GameObject collidables, Vector3 center, float angleInRadians) {
+
 	}
 }

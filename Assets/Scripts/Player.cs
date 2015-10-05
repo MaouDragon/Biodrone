@@ -30,6 +30,7 @@ public class Player : MonoBehaviour, ICollidable
 		//shield.transform.parent = transform;
 		shield.SetActive(true);
 		shield.AddComponent<PlayerWall>();
+		shield.transform.position = transform.position;
     }
 	
 	// Update is called once per frame
@@ -59,8 +60,9 @@ public class Player : MonoBehaviour, ICollidable
         move.Set(translationX, translationY, 0);
         move.Normalize();
         // Translate the rigidBody to the input movement
-        playerRigidBody.MovePosition(transform.position + move * speed / 2);
 		playerRigidBody.velocity = move * speed / Time.fixedDeltaTime / 2;
+        playerRigidBody.MovePosition(transform.position + move * speed / 2);
+		//Bullet.MoveCollidables(new GameObject[] { gameObject, shield }, move * speed);
 
         if (move != Vector3.zero)
             GetComponentInChildren<SpriteRenderer>().transform.up = playerRigidBody.velocity;
