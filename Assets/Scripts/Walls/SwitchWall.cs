@@ -4,7 +4,6 @@ using System.Collections;
 public class SwitchWall : Wall {
 	public bool switchOn = false;
 	public float meter = .5f;
-    public Sprite spriteOn;
 
 	// Use this for initialization
 	void Start () {

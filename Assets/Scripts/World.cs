@@ -5,7 +5,7 @@ public class World : MonoBehaviour
 {
     private GameObject player;
     public GameObject wall;
-    private bool trigger1 = true;
+    public GameObject doorFloor;
 	public GameObject[] firstSwitches;
 	public GameObject[] secondSwitches;
 	public GameObject firstWall;
@@ -20,13 +20,18 @@ public class World : MonoBehaviour
 		Bullet.playerBullet = playerBullet;
 		Bullet.normalBullet = normalBullet;
 		Bullet.bulletTrail = bulletTrail;
+
+        doorFloor.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () 
     {
-	    if ((firstSwitches[0]==null) && (firstSwitches[1]==null) &&
-		    (firstSwitches[2]==null) && (firstSwitches[3]==null))
-			Destroy(firstWall);
+        if ((firstSwitches[0] == null) && (firstSwitches[1] == null) &&
+            (firstSwitches[2] == null) && (firstSwitches[3] == null))
+        {
+            Destroy(firstWall);
+            doorFloor.SetActive(true);
+        }
 	}
 }
