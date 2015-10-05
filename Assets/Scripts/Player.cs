@@ -62,18 +62,23 @@ public class Player : MonoBehaviour, ICollidable
         playerRigidBody.MovePosition(transform.position + move * speed / 2);
 		playerRigidBody.velocity = move * speed / Time.fixedDeltaTime / 2;
 
-		// Get the vector from where the mouse was clicked
-		Vector3 mouseV = Input.mousePosition;
+        if (move != Vector3.zero)
+            GetComponentInChildren<SpriteRenderer>().transform.up = playerRigidBody.velocity;
+
+        // Get the vector from where the mouse was clicked
+        Vector3 mouseV = Input.mousePosition;
 		// Get the vector based on the screen position of the rigidBody to the mouse position clicked
 		Vector3 aim = mouseV - Camera.main.WorldToScreenPoint(transform.position);
 
-		// handle the shield
-		shield.transform.LookAt(transform.position - new Vector3(aim.x, aim.y, 0.0f), Vector3.back);
+        // handle the shield
+        //shield.transform.LookAt(transform.position - new Vector3(aim.x, aim.y, 0.0f), Vector3.back);
+        if ((rightX != 0) || (rightY != 0)) 
+            shield.transform.LookAt(transform.position - new Vector3(rightX, rightY, 0), Vector3.back);
     }
 
     public void Hit(RaycastHit rayhit, Bullet bullet)
     {
-		GetComponentInChildren<PlayerCamera>().Shake(rayhit.point);
+		GetComponentInChildren<PlayerCamera>().Shake(bullet.vel.magnitude);
 		if (--health<=0)
 			Application.LoadLevel(0);
     }
