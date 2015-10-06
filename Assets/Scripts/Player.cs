@@ -6,8 +6,9 @@ public class Player : MonoBehaviour, ICollidable
     public float speed;
     private Vector3 move;
     Rigidbody playerRigidBody;
+    private SpriteRenderer sprite;
 	private GameObject shield;
-    public Sprite shieldSprite;
+
 	public float shieldCounter;
 	public int health=10;
 
@@ -21,16 +22,8 @@ public class Player : MonoBehaviour, ICollidable
     void Awake()
     {
         playerRigidBody = GetComponent<Rigidbody>();
-
-        //shield = (GameObject)Instantiate(shield);
-        ////shield.transform.parent = transform;
-        //shield.SetActive(true);
-        //shield.AddComponent<PlayerWall>();
-        //shield.transform.position = transform.position;
-
+        sprite = GetComponent<SpriteRenderer>();
         shield = transform.Find("Shield").gameObject;
-        //shield.AddComponent<SpriteRenderer>().sprite = shieldSprite;
-        //shield.GetComponent<MeshRenderer>().enabled = false;
     }
 
     // Update is called once per frame
@@ -43,6 +36,7 @@ public class Player : MonoBehaviour, ICollidable
     {
 		transform.position = new Vector3(transform.position.x, transform.position.y);
 		KeyPress();
+        
 		//shield.transform.position = transform.position;
     }
 
@@ -86,6 +80,7 @@ public class Player : MonoBehaviour, ICollidable
         }
         else
         {
+            
             GetComponentInChildren<PlayerCamera>().Shake(bullet.vel.magnitude);
             if (--health <= 0)
                 Application.LoadLevel(0);

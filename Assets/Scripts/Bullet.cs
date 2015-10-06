@@ -76,7 +76,7 @@ public class Bullet : MonoBehaviour//, ICollidable
 
 		// initialize the Bullet
 		bullet.transform.position = new Vector3(startPos.x, startPos.y);
-		bullet.transform.localScale = Vector3.one*0.3f;
+		bullet.transform.localScale = Vector3.one*0.6f;
 		bullet.vel = new Vector3(vel.x, vel.y)*12f/14f;
 		bullet.GetComponent<Collider>().isTrigger = true;
 		

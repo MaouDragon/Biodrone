@@ -31,7 +31,8 @@ public class Enemy:MonoBehaviour, ICollidable {
 	}
 
 	public void Hit(RaycastHit rayhit, Bullet bullet) {
-		if (--health<=0)
+        Bullet.CreateNewBullet(rayhit.point, bullet.vel, typeof(EnemyBullet));
+        if (--health<=0)
 			Destroy(gameObject);
 	}
 }

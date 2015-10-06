@@ -27,8 +27,8 @@ public class World : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        if ((firstSwitches[0] == null) && (firstSwitches[1] == null) &&
-            (firstSwitches[2] == null) && (firstSwitches[3] == null))
+        if ((firstSwitches[0].GetComponent<SwitchWall>().switchOn) && (firstSwitches[1].GetComponent<SwitchWall>().switchOn) &&
+            (firstSwitches[2].GetComponent<SwitchWall>().switchOn) && (firstSwitches[3].GetComponent<SwitchWall>().switchOn))
         {
             Destroy(firstWall);
             doorFloor.SetActive(true);
